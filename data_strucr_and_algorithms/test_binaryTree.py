@@ -81,12 +81,33 @@ def inorder_genrator(root: TreeNode):
             find_first(node.right)
 
 
+def inorder_traversal(root: TreeNode):
+    out = []
+
+    def inorder(branch: TreeNode):
+        if not branch:
+            return
+        if branch.left:
+            inorder(branch.left)
+        out.append(branch.val)
+        if branch.right:
+            inorder(branch.right)
+    inorder(root)
+    return out
+
+
+def test_inorder_traversal():
+    t1 = make_basic_tree()
+    print(inorder_traversal(t1))
+
+
 def BFS(root: TreeNode):
     if not root:
         return None
     depth = 0
     que = []
     que.append(root)
+
     while que:
         for _ in range(len(que)):
             cur = que.pop(0)
@@ -160,6 +181,43 @@ class Solution():
         return self.Max
 
 
+def preorder_traversal(root: TreeNode):
+    out = []
+
+    def preorder(branch: TreeNode):
+        out.append(branch.val)
+        if branch.left:
+            preorder(branch.left)
+        if branch.right:
+            preorder(branch.right)
+    preorder(root)
+    return out
+
+
+def test_preorder_traversal():
+    t1 = make_basic_tree()
+    assert [1, 2, 4, 5, 3, 6, 7] == preorder_traversal(t1)
+
+def preorder_generator(root:TreeNode):
+    visited = []
+    nodes = [root]
+    while nodes:
+        node = nodes.pop()
+        visited.append(node)
+        yield node.val
+        if node.left:
+            nodes.append(node.left)
+        
+        while not nodes:
+            if visited:
+                vnode = visited.pop()
+                if vnode.right:
+                    nodes.append(vnode.right)
+            else:
+                break
+def test_preorder_generator():
+    t1 = make_basic_tree()
+    assert [1, 2, 4, 5, 3, 6, 7] ==[val for val in  preorder_generator(t1)]
 def main():
     root = make_basic_tree()
     BFS(root)
@@ -169,6 +227,7 @@ def main():
     s = Solution()
     print(s.dpethOfDFS(root))
     test_inorder_gen()
+    test_inorder_traversal()
 
 
 if __name__ == "__main__":
