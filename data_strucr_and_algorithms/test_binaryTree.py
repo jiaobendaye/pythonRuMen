@@ -198,7 +198,8 @@ def test_preorder_traversal():
     t1 = make_basic_tree()
     assert [1, 2, 4, 5, 3, 6, 7] == preorder_traversal(t1)
 
-def preorder_generator(root:TreeNode):
+
+def preorder_generator(root: TreeNode):
     visited = []
     nodes = [root]
     while nodes:
@@ -207,7 +208,7 @@ def preorder_generator(root:TreeNode):
         yield node.val
         if node.left:
             nodes.append(node.left)
-        
+
         while not nodes:
             if visited:
                 vnode = visited.pop()
@@ -215,9 +216,59 @@ def preorder_generator(root:TreeNode):
                     nodes.append(vnode.right)
             else:
                 break
+
+
 def test_preorder_generator():
     t1 = make_basic_tree()
-    assert [1, 2, 4, 5, 3, 6, 7] ==[val for val in  preorder_generator(t1)]
+    assert [1, 2, 4, 5, 3, 6, 7] == [val for val in preorder_generator(t1)]
+
+
+def post_traversal(root: TreeNode):
+    out = []
+
+    def postortder(branch: TreeNode):
+        if not branch:
+            return
+        if branch.left:
+            postortder(branch.left)
+        if branch.right:
+            postortder(branch.right)
+        out.append(branch.val)
+    postortder(root)
+    return out
+
+
+def test_postorder_traversal():
+    t1 = make_basic_tree()
+    assert [4, 5, 2, 6, 7, 3, 1] == post_traversal(t1)
+
+
+def postorder_iter(root: TreeNode):
+    """
+
+    """
+    if not root:
+        return []
+    out = []
+    stack = [(root, False)]
+    while stack:
+        cur, visited = stack.pop()
+        if visited:
+            out.append(cur.val)
+        else:
+            stack.append((cur, True))
+            if cur.right:
+                stack.append((cur.right, False))
+            if cur.left:
+                stack.append((cur.left, False))
+    return out
+
+
+def test_postorder_iter():
+    t1 = make_basic_tree()
+    assert [4, 5, 2, 6, 7, 3, 1] == postorder_iter(t1)
+
+
 def main():
     root = make_basic_tree()
     BFS(root)
